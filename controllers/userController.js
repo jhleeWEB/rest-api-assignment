@@ -32,7 +32,7 @@ const login = (req, res) => {
     }
     const user = results[0];
     const hashPassword = crypto
-      .pbkdf2Sync(password, salt, 10000, 10, "sha512")
+      .pbkdf2Sync(password, user.salt, 10000, 10, "sha512")
       .toString("base64");
 
     if (user.password !== hashPassword) {

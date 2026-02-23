@@ -1,12 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const bookController = require("../controllers/bookController");
 router.use(express.json());
 
-router.post("/", (req, res) => {
-  res.json("도서 조회");
-});
-router.get("/:id", (req, res) => {
-  res.json("상세 도서 조회");
-});
+router.get("/", bookController.allBooks);
+router.get("/:id", bookController.bookDetails);
 
 module.exports = router;

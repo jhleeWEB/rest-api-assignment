@@ -34,14 +34,22 @@ const allBooks = (req, res) => {
 };
 
 const bookDetails = (req, res) => {
-  const { id } = req.params;
-  const sql =
-    "SELECT * FROM books left join categories on books.category_id = categories.id where books.id = ?";
-  db.query(sql, id, (err, results) => {
+  const { userId } = req.body;
+  const id = parseInt(req.params.id);
+  let sql = `select * ,
+  (select count(*) from likes where book_id=books.id) as likes ,
+  (select exists (select * from likes where book_id=? and user_id= ?)) as liked 
+  from books 
+  left join categories 
+  on books.category_id = categories.category_id 
+  where books.id = ?`;
+  const values = [id, userId, id];
+  db.query(sql, values, (err, results) => {
     if (err) {
+      console.error(err);
       res.status(StatusCodes.BAD_REQUEST).end();
     }
-    if (results[0]) {
+    if (results && results[0]) {
       res.status(StatusCodes.OK).json(results[0]);
     } else {
       res.status(StatusCodes.BAD_REQUEST).end();

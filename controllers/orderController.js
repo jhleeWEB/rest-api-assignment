@@ -89,15 +89,15 @@ const deleteCartItems = (items) => {
 };
 
 const getOrders = (req, res) => {
-  const { bookId, quantity, userId } = req.body;
-  const sql = ``;
-  const values = [bookId, quantity, userId];
-  db.query(sql, values, (err, results) => {
+  const sql = `select orders.id, book_title, total_quantity, total_price, created_at, address, contact, receiver from orders 
+  left join delivery on orders.delivery_id = delivery.id`;
+
+  db.query(sql, (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(StatusCodes.BAD_REQUEST).end();
+      return res.status(StatusCodes.BAD_REQUEST).end(err);
     }
-    return res.status(StatusCodes.CREATED).end();
+    return res.status(StatusCodes.OK).json(results);
   });
 };
 

@@ -19,7 +19,7 @@ const addItems = (req, res) => {
 };
 const removeItems = (req, res) => {
   const { cartId } = req.body;
-  const sql = `delete from cartItems where id = ?`;
+  const sql = `delete from cartItems where id ?`;
   db.query(sql, cartId, (err, results) => {
     if (err) {
       console.error(err);

@@ -103,14 +103,16 @@ const getOrders = (req, res) => {
 
 const getOrderDetails = (req, res) => {
   const { id } = req.params;
-  const sql = ``;
-  const values = [bookId, quantity, userId];
-  db.query(sql, values, (err, results) => {
+  const sql = `select book_id, title, author, price, quantity from orderedBooks 
+  left join books on orderedBooks.book_id = books.id 
+  where order_id = ?`;
+
+  db.query(sql, id, (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(StatusCodes.BAD_REQUEST).end();
+      return res.status(StatusCodes.BAD_REQUEST).end(err);
     }
-    return res.status(StatusCodes.CREATED).end();
+    return res.status(StatusCodes.OK).json(results);
   });
 };
 
